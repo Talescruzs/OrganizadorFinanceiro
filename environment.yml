@@ -1,0 +1,8 @@
+name: organizador
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - pip
+  - pip:
+    - mysql
