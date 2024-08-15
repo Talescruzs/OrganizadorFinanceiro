@@ -134,11 +134,11 @@ class Conection:
     def remove_user(self, where:str = "1=1"):
         self.__delete(table="Usuarios", where=where)
 
-    def create_account(self, bench:str, typ:str, date:datetime, idUser:int, money:float=0.0):
+    def create_account(self, bank:str, typ:str, date:datetime, idUser:int, money:float=0.0):
         return self.__insert(
             table="Contas", 
             columns="banco, tipo, saldo, data_criacao, id_usuario",
-            values="'{0}', '{1}', {2}, '{3}', {4}".format(bench, typ, money, date, idUser)
+            values="'{0}', '{1}', {2}, '{3}', {4}".format(bank, typ, money, date, idUser)
             )
 
     def search_account(self, columns:str = "*", where:str = "1=1"):
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     for a in r:
         print("id: {0} nome: {1}".format(a[0], a[1]))
 
-    r = connect.create_account(bench="Banrisul", typ="P", date=datetime.today(), idUser=idUser, money=1000.50)
+    r = connect.create_account(bank="Banrisul", typ="P", date=datetime.today(), idUser=idUser, money=1000.50)
     r = connect.search_account()
     for a in r:
         print("id: {0} nome: {1}".format(a[0], a[1]))
@@ -201,7 +201,7 @@ if __name__ == "__main__":
     r = connect.search_routines()
     for a in r:
         print("id: {0} Tipo: {1} Valor {2}".format(a[0], a[1], a[3]))
-
+        
     connect.remove_routines("id_conta = {0}".format(idConta))
     connect.remove_account("id_usuario = {0}".format(idUser))
     connect.remove_user("nome = 'Tales'")
