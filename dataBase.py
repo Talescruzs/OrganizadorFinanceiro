@@ -133,7 +133,7 @@ class Connection(object):
         return self.__select(table="Usuarios", columns=columns, where=where)
 
     def remove_user(self, where: str = "1=1"):
-        self.__delete(table="Usuarios", where=where)
+        return self.__delete(table="Usuarios", where=where)
 
     def create_account(self, bank: str, typ: str, date: datetime, idUser: int, money: float = 0.0):
         return self.__insert(
@@ -146,11 +146,9 @@ class Connection(object):
         return self.__select(table="Contas", columns=columns, where=where)
 
     def remove_account(self, where: str = "1=1"):
-        self.__delete(table="Contas", where=where)
+        return self.__delete(table="Contas", where=where)
 
-    def create_routines(
-        self, typ: str, typR: str, value: float, iniDate: datetime, date: datetime, desc: str, idConta: int
-    ):
+    def create_routines(self, typ: str, typR: str, value: float, iniDate: datetime, date: datetime, desc: str, idConta: int):
         return self.__insert(
             table="Rotinas",
             columns="tipo, tipo_repeticao, valor, data_base, data_criacao, foi_add_manual, descricao, id_conta",
@@ -163,7 +161,20 @@ class Connection(object):
         return self.__select(table="Rotinas", columns=columns, where=where)
 
     def remove_routines(self, where: str = "1=1"):
-        self.__delete(table="Rotinas", where=where)
+        return self.__delete(table="Rotinas", where=where)
+
+    def create_historic(self, date: datetime, typ: str, value: float, desc: str, idConta: int):
+        return self.__insert(
+            table="Historico",
+            columns="data_criacao, tipo, valor, descricao, id_conta",
+            values="'{0}', '{1}', {2}, '{3}', {4}".format(date, typ, value, desc, idConta)
+        )
+
+    def search_historic(self, columns: str = "*", where: str = "1=1"):
+        return self.__select(table="Historico", columns=columns, where=where)
+
+    def remove_historic(self, where: str = "1=1"):
+        return self.__delete(table="Historico", where=where)
 
     def close_connection(self):
         if self.connection.is_connected():
@@ -208,6 +219,19 @@ if __name__ == "__main__":
     for a in r:
         print("id: {0} Tipo: {1} Valor {2}".format(a[0], a[1], a[3]))
 
+    r = connect.create_historic(
+        date=datetime(2024, 8, 14),
+        typ="I",
+        value=1120,
+        desc="Salario de estágio TCU",
+        idConta=idConta
+    )
+    r = connect.search_historic()
+    for a in r:
+        print("id: {0} Tipo: {1} Valor {2}".format(a[0], a[2], a[3]))
+
+
+    connect.remove_historic("id_conta = {0}".format(idConta))
     connect.remove_routines("id_conta = {0}".format(idConta))
     connect.remove_account("id_usuario = {0}".format(idUser))
     connect.remove_user("nome = 'Tales'")
