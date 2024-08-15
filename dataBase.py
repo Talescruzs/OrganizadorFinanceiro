@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import date, time, datetime
 from mysql.connector import Error
 
 class Conection:
@@ -14,7 +15,7 @@ class Conection:
             database=self.db_name
         )
         self.cursor = self.connection.cursor()
-
+        
     def create_database(self):
         try:
             # Conectar ao servidor MySQL
@@ -78,46 +79,86 @@ class Conection:
                 print(f"Tabela Historico criada com sucesso no banco de dados '{self.db_name}'!")     
         except Error as e:
             print(f"Erro ao criar a tabela: {e}")
-            
-    def create_user(self, nome:str):
+
+    def __insert(self, table:str, columns:str, values:str):
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
                 # Inserir um novo usuário
                 insert_user_query = """
-                INSERT INTO Usuarios (nome)
-                VALUES (%s)
-                """
-                self.cursor.execute(insert_user_query, (nome,))
+                INSERT INTO {0} ({1})
+                VALUES ({2});
+                """.format(table, columns, values)
+                self.cursor.execute(insert_user_query)
                 self.connection.commit()  # Confirmar a transação
-            print(f"Usuário '{nome}' inserido com sucesso na tabela 'Usuarios'!")
+            print(f"'{values}' inserido com sucesso na tabela '{table}'!")
+            return True
         except Error as e:
-            print(f"Erro ao inserir usuário: {e}")
-            
-    def search_user(self, columns:str = "*", where:str = "1=1"):
+            print(f"Erro ao inserir {table}: {e}")
+            return False
+
+    def __select(self, table:str, columns:str, where:str):
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
                 # Inserir um novo usuário
-                query = f"SELECT {columns} FROM Usuarios WHERE {where}"
+                query = f"SELECT {columns} FROM {table} WHERE {where}"
                 self.cursor.execute(query)
                 results = self.cursor.fetchall()
                 return results
-            print(f"Usuário '{results}'")
+            print(f"{table} '{results}'")
         except Error as e:
-            print(f"Erro ao inserir usuário: {e}")
+            print(f"Erro no select {table}: {e}")
+            return False
 
-    def remove_user(self, where:str = "1=1"):
+    def __delete(self, table:str, where:str):
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
                 # Inserir um novo usuário
-                query = f"DELETE FROM Usuarios WHERE {where}"
+                query = f"DELETE FROM {table} WHERE {where}"
                 self.cursor.execute(query)
                 self.connection.commit()
-            print(f"Usuário(s) removido(s) onde {where}.")
+            print(f"{table}(s) removido(s) onde {where}.")
+            return True
         except Error as e:
-            print(f"Erro ao inserir usuário: {e}")
+            print(f"Erro ao remover {table}: {e}")
+            return False
+
+    def create_user(self, nome:str):
+        return self.__insert(table="Usuarios", columns="nome", values="'{0}'".format(nome))
+            
+    def search_user(self, columns:str = "*", where:str = "1=1"):
+        return self.__select(table="Usuarios", columns=columns, where=where)
+
+    def remove_user(self, where:str = "1=1"):
+        self.__delete(table="Usuarios", where=where)
+
+    def create_account(self, bench:str, typ:str, date:datetime, idUser:int, money:float=0.0):
+        return self.__insert(
+            table="Contas", 
+            columns="banco, tipo, saldo, data_criacao, id_usuario",
+            values="'{0}', '{1}', {2}, '{3}', {4}".format(bench, typ, money, date, idUser)
+            )
+
+    def search_account(self, columns:str = "*", where:str = "1=1"):
+        return self.__select(table="Contas", columns=columns, where=where)
+    
+    def remove_account(self, where:str = "1=1"):
+        self.__delete(table="Contas", where=where)
+
+    def create_routines(self, typ:str, typR:str, value:float, iniDate:datetime, date:datetime, desc:str, idConta:int):
+        return self.__insert(
+            table="Rotinas", 
+            columns="tipo, tipo_repeticao, valor, data_base, data_criacao, foi_add_manual, descricao, id_conta",
+            values="'{0}', '{1}', {2}, '{3}', '{4}', {5}, '{6}', {7}".format(typ, typR, value, iniDate, date, 0, desc, idConta)
+            )
+
+    def search_routines(self, columns:str = "*", where:str = "1=1"):
+        return self.__select(table="Rotinas", columns=columns, where=where)
+    
+    def remove_routines(self, where:str = "1=1"):
+        self.__delete(table="Rotinas", where=where)
 
     def close_connection(self):
         if self.connection.is_connected():
@@ -136,10 +177,32 @@ if __name__ == "__main__":
     connect = Conection(host_name, user_name, user_password, db_name)
     # connect.create_database()
     # connect.create_tables()
-    # r =connect.create_user(nome="Teste")
-    # r = connect.search_user(where="nome = 'Teste'")
-    # for a in r:
-    #     print("id: {0} nome: {1}".format(a[0], a[1]))
-    # connect.remove_user("nome = 'Tales'")
+    r = connect.create_user(nome="Tales")
+    r = connect.search_user(where="nome = 'Tales'")
+    idUser = r[0][0]
+    
+    for a in r:
+        print("id: {0} nome: {1}".format(a[0], a[1]))
 
+    r = connect.create_account(bench="Banrisul", typ="P", date=datetime.today(), idUser=idUser, money=1000.50)
+    r = connect.search_account()
+    for a in r:
+        print("id: {0} nome: {1}".format(a[0], a[1]))
+    idConta = r[0][0]
+    r = connect.create_routines(
+        typ="I", 
+        typR="M", 
+        value=1120, 
+        iniDate=datetime(2024, 8, 14), 
+        date=datetime.today(), 
+        desc="Salario de estágio TCU",
+        idConta=idConta
+    )
+    r = connect.search_routines()
+    for a in r:
+        print("id: {0} Tipo: {1} Valor {2}".format(a[0], a[1], a[3]))
+
+    connect.remove_routines("id_conta = {0}".format(idConta))
+    connect.remove_account("id_usuario = {0}".format(idUser))
+    connect.remove_user("nome = 'Tales'")
     connect.close_connection()
