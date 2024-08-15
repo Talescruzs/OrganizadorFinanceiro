@@ -15,7 +15,7 @@ Também foi levado em conta que o problema a ser resolvido pelo sistema me inter
 ### Infraestrutura
 Como infraestrutura do projeto estou utilizando meu computador antigo com debian 12 isntalado, durante as tentativas de encontrar a distro ideal para ele esbarrei em um problema um tanto diferente. Quando tentava utilizar uma instalação mínima de um sistema sem interface gráfica a rede não era localizada. Desta forma, para não perder mais tempo (passei 2 dias pesquisando), resolvi instalar o Debian com Xfce. 
 
-Mesmo com a interface gráfica, o objeticvo é estudar, então estou fazendo os ajustes do servidor pelo computador novo via ssh.
+Mesmo com a interface gráfica, o objetivo é estudar, então estou fazendo os ajustes do servidor pelo computador novo via ssh.
 
 ## Instalação
 
