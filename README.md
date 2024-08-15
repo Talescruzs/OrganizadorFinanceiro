@@ -23,6 +23,9 @@ conda env create -f environment.yml
 ```bash
 pip install mysql-connector-python
 ```
+```bash
+pip install flask
+```
 ### Desenvolvimento
 
 Execute
