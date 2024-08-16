@@ -35,7 +35,8 @@ class Connection(object):
                 create_table_query = f'''
                 CREATE TABLE IF NOT EXISTS Usuarios (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    nome VARCHAR(100) NOT NULL
+                    nome VARCHAR(100) NOT NULL,
+                    senha VARCHAR(45) NOT NULL,
                 )'''
                 self.cursor.execute(create_table_query)
                 print(f"Tabela Usuarios criada com sucesso no banco de dados '{self.db_name}'!")
@@ -126,8 +127,8 @@ class Connection(object):
             print(f"Erro ao remover {table}: {e}")
             return False
 
-    def create_user(self, nome: str):
-        return self.__insert(table="Usuarios", columns="nome", values="'{0}'".format(nome))
+    def create_user(self, nome: str, senha: str):
+        return self.__insert(table="Usuarios", columns="nome, senha", values="'{0}', '{1}'".format(nome, senha))
 
     def search_user(self, columns: str = "*", where: str = "1=1"):
         return self.__select(table="Usuarios", columns=columns, where=where)
@@ -194,7 +195,7 @@ if __name__ == "__main__":
     connect = Connection(host_name, user_name, user_password, db_name)
     # connect.create_database()
     # connect.create_tables()
-    r = connect.create_user(nome="Tales")
+    r = connect.create_user(nome="Tales", senha="123")
     r = connect.search_user(where="nome = 'Tales'")
     idUser = r[0][0]
 
