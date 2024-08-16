@@ -1,13 +1,13 @@
 from flask import Flask, render_template, url_for, redirect, session, request
-from dataBase import Connection
+# from dataBase import Connection
 
 app = Flask(__name__)
 
-host_name = "localhost"
-user_name = "root"
-user_password = "*"
-db_name = "Financas"
-connect = Connection(host_name, user_name, user_password, db_name)
+# host_name = "localhost"
+# user_name = "root"
+# user_password = "*"
+# db_name = "Financas"
+# connect = Connection(host_name, user_name, user_password, db_name)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
