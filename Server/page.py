@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, session, request
 from dataBase import Connection
 
 app = Flask(__name__)
@@ -9,20 +9,39 @@ user_password = "*"
 db_name = "Financas"
 connect = Connection(host_name, user_name, user_password, db_name)
 
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
 @app.route("/")
 def home():
-    return render_template("view/home.html")
+    if 'nome' in session:
+        return render_template("view/home.html", nome=session["nome"])
+    return redirect(url_for('login'))
 
-@app.route("/register")
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template("view/register.html", connect = connect)
+    if request.method == 'POST':
+        session['nome'] = request.form['nome']
+        return redirect(url_for('home'))
+    return render_template("view/register.html")
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("view/login.html", methods=['GET', 'POST'])
+    if request.method == 'POST':
+        session['nome'] = request.form['nome']
+        return redirect(url_for('home'))
+    return render_template("view/login.html")
 
 @app.post("/cadastrar")
 def cadastrar():
+    return redirect(url_for('home'))
+
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('nome', None)
     return redirect(url_for('home'))
 
 with app.test_request_context():

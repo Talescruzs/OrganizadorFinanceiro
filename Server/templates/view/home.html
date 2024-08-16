@@ -1,1 +1,17 @@
-Hello, World
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Boas-Vindas</title>
+</head>
+<body>
+    <!-- Mensagem de boas-vindas ao usuário -->
+    <h2>Bem-vindo, {{ nome }}!</h2>
+    
+    <!-- Botão de logout -->
+    <form action="/logout">
+        <input type="submit" value="Logout">
+    </form>
+</body>
+</html>
