@@ -41,7 +41,8 @@ def try_login():
 def set_account():
     account = request.json
     print(account)
-    c.create_account(bank=account["banco"], typ=account["tipo"], date=account["data"], idUser=account["idUser"], money=account["dinheiro"])
+    print(account["user"])
+    c.create_account(bank=account["banco"], typ=account["tipo"], date=account["data"], idUser=account["user"]["id"], money=account["dinheiro"])
     return account
 
 @app.route('/get_account', methods=['GET', 'POST'])
@@ -50,23 +51,21 @@ def get_account():
         account = request.json
         keys = list(account.keys())
         values = list(account.values())
-        print(keys)
-        print(values)
         where = ""
+        idUser = c.search_user(where="nome = '{0}' and senha = {1}".format(account["user"]["nome"], account["user"]["senha"]))[0][0]
+        print(idUser)
+        where = "id_usuario = {0} ".format(idUser)
         for i in range(len(account)):
             print(keys[i], values[i])
-            if(i!=0):
-                where= where+"and "
-            where = where+"{0} = '{1}' ".format(keys[i], values[i])
-        print(where)
+            if(keys[i] != "user"):
+                if(i!=0):
+                    where= where+"and "
+                where = where+"{0} = '{1}' ".format(keys[i], values[i])
         return make_response(
             c.search_account(where=where)
         )
     except:
-        return make_response(
-            c.search_account()
-        ) 
-
+        return [None]
 
 @app.route('/set_routines', methods=['POST'])
 def set_routines():
@@ -81,19 +80,30 @@ def get_routines():
         routines = request.json
         keys = list(routines.keys())
         values = list(routines.values())
-        print(keys)
-        print(values)
         where = ""
+        idUser = c.search_user(where="nome = '{0}' and senha = {1}".format(routines["user"]["nome"], routines["user"]["senha"]))[0][0]
+        accounts = c.search_account(where="id_usuario = {0}".format(idUser))
+        if(len(accounts) == 0):
+            return [None]
+        where = "id_conta in ("
+        for a in range(len(accounts)):
+            if(a!=0):
+                where+=", "
+            where = where+str(accounts[a][0])
+        where = where+") "
         for i in range(len(routines)):
             print(keys[i], values[i])
-            if(i!=0):
-                where= where+"and "
-            where = where+"{0} = '{1}' ".format(keys[i], values[i])
+            if(keys[i] != "user"):
+                if(i!=0):
+                    where= where+"and "
+                where = where+"{0} = '{1}' ".format(keys[i], values[i])
         print(where)
+        
         return make_response(
             c.search_routines(where=where)
         )
     except:
+        print("fail")
         return make_response(
             c.search_routines()
         ) 
