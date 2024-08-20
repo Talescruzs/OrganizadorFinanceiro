@@ -1,29 +1,38 @@
 from flask import Flask, make_response, request
 from dataBase import Connection
+import json
 
 host_name = "localhost"
 user_name = "root"
-user_password = "*"
+user_password = "senha"
 db_name = "Financas"
 c = Connection(host_name, user_name, user_password, db_name)
 # c.create_user(nome="Teste", senha="123")
 
 app = Flask(__name__)
 
-@app.route('/set_user', methods=['POST'])
-def set_user():
+@app.route('/register', methods=['POST'])
+def register():
     user = request.json
-    c.create_user(nome=user["nome"], senha=user["senha"])
-    return user
+    """ 
+    TODO
+    QUESTÃO DA SEGURANÇA DA REQUISIÇÃO
+    """ 
+    if(c.create_user(nome=user["nome"], senha=user["senha"])):
+        return make_response(
+            json.dumps(
+                {
+                    'user':{
+                        'nome':user["nome"],
+                        'senha':'{0}'.format(user["senha"])
+                    }
+                }
+            )
+        ) 
+    return [None]
 
-@app.route('/get_user', methods=['GET'])
-def get_user():
-    return make_response(
-        c.search_user()
-    ) 
-
-@app.route('/try_login', methods=['POST'])
-def try_login():
+@app.route('/login', methods=['POST'])
+def login():
     user = request.json
     """ 
     TODO
@@ -33,7 +42,14 @@ def try_login():
     r = c.search_user(where="nome = '{0}' and senha = '{1}'".format(user["nome"], user["senha"]))
     if(len(r) == 1):
         return make_response(
-            r
+            json.dumps(
+                {
+                    'user':{
+                        'nome':r[0][1],
+                        'senha':r[0][2]
+                    }
+                }
+            )
         ) 
     return [None]
 
@@ -42,7 +58,8 @@ def set_account():
     account = request.json
     print(account)
     print(account["user"])
-    c.create_account(bank=account["banco"], typ=account["tipo"], date=account["data"], idUser=account["user"]["id"], money=account["dinheiro"])
+    idUser = c.search_user(where="nome = '{0}' and senha = {1}".format(account["user"]["nome"], account["user"]["senha"]))[0][0]
+    c.create_account(bank=account["banco"], typ=account["tipo"], date=account["data"], idUser=idUser, money=account["dinheiro"])
     return account
 
 @app.route('/get_account', methods=['GET', 'POST'])

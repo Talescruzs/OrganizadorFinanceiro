@@ -188,7 +188,7 @@ if __name__ == "__main__":
     # Parâmetros de conexão
     host_name = "localhost"
     user_name = "root"
-    user_password = "*"
+    user_password = "senha"
     db_name = "Financas"
 
     # Chamar a função para criar o banco de dados
@@ -232,8 +232,8 @@ if __name__ == "__main__":
         print("id: {0} Tipo: {1} Valor {2}".format(a[0], a[2], a[3]))
 
 
-    # connect.remove_historic("id_conta = {0}".format(idConta))
-    # connect.remove_routines("id_conta = {0}".format(idConta))
-    # connect.remove_account("id_usuario = {0}".format(idUser))
-    # connect.remove_user("nome = 'Tales'")
+    connect.remove_historic("id_conta = {0}".format(idConta))
+    connect.remove_routines("id_conta = {0}".format(idConta))
+    connect.remove_account("id_usuario = {0}".format(idUser))
+    connect.remove_user("nome = 'Tales'")
     connect.close_connection()
