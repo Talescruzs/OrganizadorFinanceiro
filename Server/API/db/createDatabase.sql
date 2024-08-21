@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS Financas;
-
 USE Financas;
 
 CREATE TABLE IF NOT EXISTS Usuarios (

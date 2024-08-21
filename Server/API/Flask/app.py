@@ -1,13 +1,14 @@
-from flask import Flask, make_response, request
+from flask import Flask, make_response, request, jsonify
 from dataBase import Connection
-import json
+import sys
 
-host_name = "localhost"
-user_name = "root"
-user_password = "senha"
-db_name = "Financas"
+# Para rodar: /caminho/app.py localhost root senha dataBase
+
+host_name = sys.argv[1]
+user_name = sys.argv[2]
+user_password = sys.argv[3]
+db_name = sys.argv[4]
 c = Connection(host_name, user_name, user_password, db_name)
-# c.create_user(nome="Teste", senha="123")
 
 app = Flask(__name__)
 
@@ -19,14 +20,13 @@ def register():
     QUESTÃO DA SEGURANÇA DA REQUISIÇÃO
     """ 
     if(c.create_user(nome=user["nome"], senha=user["senha"])):
+        data = {
+            'nome':user["nome"],
+            'senha':'{0}'.format(user["senha"])
+        }
         return make_response(
-            json.dumps(
-                {
-                    'user':{
-                        'nome':user["nome"],
-                        'senha':'{0}'.format(user["senha"])
-                    }
-                }
+            jsonify(
+                user=data
             )
         ) 
     return [None]
@@ -41,14 +41,13 @@ def login():
     
     r = c.search_user(where="nome = '{0}' and senha = '{1}'".format(user["nome"], user["senha"]))
     if(len(r) == 1):
+        data = {
+            'nome':r[0][1],
+            'senha':r[0][2]
+        }
         return make_response(
-            json.dumps(
-                {
-                    'user':{
-                        'nome':r[0][1],
-                        'senha':r[0][2]
-                    }
-                }
+            jsonify(
+                user=data
             )
         ) 
     return [None]
