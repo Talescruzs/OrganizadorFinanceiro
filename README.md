@@ -36,6 +36,7 @@ conda env create -f environment.yml
 
 ```bash
 pip install mysql-connector-python
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 ### Desenvolvimento
 

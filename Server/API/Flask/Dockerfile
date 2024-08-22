@@ -11,4 +11,4 @@ RUN chmod +x /app/wait-for-it.sh
 # Instalar as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["./wait-for-it.sh", "db-finan:3306", "--", "python", "app.py"]
+CMD ["./wait-for-it.sh", "db-finan:3306", "-t 120", "--", "python", "app.py"]
