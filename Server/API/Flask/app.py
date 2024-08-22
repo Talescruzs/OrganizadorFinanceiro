@@ -1,13 +1,19 @@
 from flask import Flask, make_response, request, jsonify
 from dataBase import Connection
-import sys
+from dotenv import load_dotenv
+from pathlib import Path
+import os
 
-# Para rodar: /caminho/app.py localhost root senha dataBase
+try:
+    dotenv_path = Path('./.env')
+    load_dotenv(dotenv_path=dotenv_path)
+except:
+    pass
 
-host_name = sys.argv[1]
-user_name = sys.argv[2]
-user_password = sys.argv[3]
-db_name = sys.argv[4]
+host_name = os.getenv('MYSQL_HOSNAME')
+user_name = os.getenv('MYSQL_USER')
+user_password = os.getenv('MYSQL_PASSWORD')
+db_name = os.getenv('MYSQL_DATABASE')
 c = Connection(host_name, user_name, user_password, db_name)
 
 app = Flask(__name__)
@@ -40,6 +46,8 @@ def login():
     """ 
     
     r = c.search_user(where="nome = '{0}' and senha = '{1}'".format(user["nome"], user["senha"]))
+    if(not r):
+        return [None]
     if(len(r) == 1):
         data = {
             'nome':r[0][1],
@@ -49,8 +57,9 @@ def login():
             jsonify(
                 user=data
             )
-        ) 
-    return [None]
+        )
+    else:
+        return [None]
 
 @app.route('/set_account', methods=['POST'])
 def set_account():
