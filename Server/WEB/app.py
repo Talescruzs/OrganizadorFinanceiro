@@ -1,6 +1,17 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 # from dataBase import Connection
 import requests
+from dotenv import load_dotenv
+from pathlib import Path
+import os
+
+try:
+    dotenv_path = Path('./.env')
+    load_dotenv(dotenv_path=dotenv_path)
+except:
+    pass
+
+url_api = os.getenv('URL_BASE')
 
 # url = "http://192.168.100.10:5000/login"
 # json = {
@@ -21,7 +32,6 @@ app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-
 @app.route("/")
 def home():
     if 'user' in session:
@@ -32,7 +42,7 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        url = "http://192.168.100.10:5000/register"
+        url = "{0}/register".format(url_api)
         json = {
             "nome":request.form['nome'],
             "senha":request.form['senha']
@@ -45,7 +55,7 @@ def register():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        url = "http://192.168.100.10:5000/login"
+        url = "{0}/login".format(url_api)
         json = {
             "nome":request.form['nome'],
             "senha":request.form['senha']
