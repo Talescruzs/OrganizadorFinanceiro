@@ -1,5 +1,6 @@
 from flask import Flask, make_response, request, jsonify
 from dataBase import Connection
+from controle import verificaUser
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -63,34 +64,45 @@ def login():
 
 @app.route('/set_account', methods=['POST'])
 def set_account():
-    account = request.json
-    print(account)
-    print(account["user"])
-    idUser = c.search_user(where="nome = '{0}' and senha = {1}".format(account["user"]["nome"], account["user"]["senha"]))[0][0]
-    c.create_account(bank=account["banco"], typ=account["tipo"], date=account["data"], idUser=idUser, money=account["dinheiro"])
-    return account
+    try:
+        idUser = verificaUser(request.json["user"], c)
+        data = request.json["data"]
+        if(idUser == 0):
+            return ["no user find"]
+        if(c.create_account(bank=data["banco"], typ=data["tipo"], date=data["data"], idUser=data, money=data["dinheiro"])):
+            return data
+        return ["error to find user"]
+    except KeyError as e:
+        if(str(e) == "'user'"):
+            return ["missing user"]
+        if(str(e) == "'data'"):
+            return ["missing data"]
+        else:
+            return ["account data error"]
 
 @app.route('/get_account', methods=['GET', 'POST'])
 def get_account():
     try:
-        account = request.json
-        keys = list(account.keys())
-        values = list(account.values())
-        where = ""
-        idUser = c.search_user(where="nome = '{0}' and senha = {1}".format(account["user"]["nome"], account["user"]["senha"]))[0][0]
-        print(idUser)
+        # account = request.json
+        # keys = list(account.keys())
+        # values = list(account.values())
+        # where = ""
+        idUser = verificaUser(request.json["user"], c)
+        if(idUser == 0):
+            return ["no user find"]
+
         where = "id_usuario = {0} ".format(idUser)
-        for i in range(len(account)):
-            print(keys[i], values[i])
-            if(keys[i] != "user"):
-                if(i!=0):
-                    where= where+"and "
-                where = where+"{0} = '{1}' ".format(keys[i], values[i])
+        # for i in range(len(account)):
+        #     print(keys[i], values[i])
+        #     if(keys[i] != "user"):
+        #         if(i!=0):
+        #             where= where+"and "
+        #         where = where+"{0} = '{1}' ".format(keys[i], values[i])
         return make_response(
             c.search_account(where=where)
         )
     except:
-        return [None]
+        return ["error"]
 
 @app.route('/set_routines', methods=['POST'])
 def set_routines():
