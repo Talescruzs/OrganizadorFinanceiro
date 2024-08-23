@@ -10,8 +10,20 @@
       <div class="container">
         <h1 class="logo">Login</h1>
         <strong><nav>
+          <h2>{{ alerta }}</h2>
+          <form method="post">
+              <!-- Campo para o nome do usuário -->
+              <label for="nome">Nome:</label><br>
+              <input type="text" id="nome" name="nome" required><br><br>
+              
+              <!-- Campo para a senha do usuário -->
+              <label for="senha">Senha:</label><br>
+              <input type="password" id="senha" name="senha" required><br><br>
+              
+              <!-- Botão de envio do formulário -->
+              <input type="submit" value="Logar">
+          </form>
           <ul class="menu">
-            <li><a href="#">Logar</a></li>
             <li><a href="{{ url_for('register') }}">Cadastrar</a></li>
           </ul>
         </nav></strong>

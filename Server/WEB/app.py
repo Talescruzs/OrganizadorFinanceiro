@@ -1,5 +1,15 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 # from dataBase import Connection
+import requests
+
+# url = "http://192.168.100.10:5000/login"
+# json = {
+# 	"nome":"Valquiria",
+# 	"senha":"1234"
+# }
+
+# response = requests.post(url=url, json=json)
+# print(response.json())
 
 app = Flask(__name__)
 
@@ -14,23 +24,37 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.route("/")
 def home():
-    if 'nome' in session:
-        return render_template("view/home.html", nome=session["nome"])
+    if 'user' in session:
+        return render_template("view/home.html", nome=session["user"]["nome"])
     return redirect(url_for('login'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        session['nome'] = request.form['nome']
+        url = "http://192.168.100.10:5000/register"
+        json = {
+            "nome":request.form['nome'],
+            "senha":request.form['senha']
+        }
+        response = requests.post(url=url, json=json)
+        session['user'] = response.json()["user"]
         return redirect(url_for('home'))
     return render_template("view/register.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session['nome'] = request.form['nome']
-        return redirect(url_for('home'))
+        url = "http://192.168.100.10:5000/login"
+        json = {
+            "nome":request.form['nome'],
+            "senha":request.form['senha']
+        }
+        response = requests.post(url=url, json=json)
+        if(response.json() != [None]):
+            session['user'] = response.json()["user"]
+            return redirect(url_for('home'))
+        return render_template("view/login.html", alerta="Errado, tente novamente")
     return render_template("view/login.html")
 
 @app.post("/cadastrar")
@@ -41,7 +65,7 @@ def cadastrar():
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
-    session.pop('nome', None)
+    session.pop('user', None)
     return redirect(url_for('home'))
 
 with app.test_request_context():
