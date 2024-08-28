@@ -78,11 +78,43 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('home'))
 
-with app.test_request_context():
-    print(url_for('home'))
-    print(url_for('register'))
-    print(url_for('login', next='/'))
-    # print(url_for('profile', username='John Doe'))
+@app.route("/contas")
+def contas():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    url = "{0}/get_account".format(url_api)
+    json = {
+        "user":session['user']
+    }
+    response = requests.post(url=url, json=json)
+    print(response.json())
+
+
+    return render_template("view/contas.html", contas=response.json())
+
+@app.route("/contas/criar")
+def criarConta():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        url = "{0}/set_account".format(url_api)
+        json = {
+            'user':{
+                session['user']
+            },
+            'data':{
+                request.form['banco'],
+                request.form['tipo'],
+                request.form['data'],
+                request.form['dinheiro']
+            }
+        }
+        response = requests.post(url=url, json=json)
+        return redirect(url_for('contas'))
+
+    return render_template("view/criarContas.html")
 
     
 if __name__ == "__main__":

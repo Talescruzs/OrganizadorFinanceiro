@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+ <head>
+   <meta charset="utf-8">
+   <title>Login</title>
+   <link rel="stylesheet" href="{{ url_for('static',     filename='css/template.css') }}">
+ </head>
+ <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">Criar Conta</h1>
+        <strong><nav>
+          <h2>{{ alerta }}</h2>
+          <form method="post">
+              <label for="banco">Banco:</label><br>
+              <input type="text" id="banco" name="banco" required><br><br>
+              
+              <label for="tipo">Tipo:</label><br>
+              <select name="tipo" id="tipo">
+                <option value="I">I</option>
+                <option value="D">D</option>
+              </select>
+
+              <label for="data">Data:</label><br>
+              <input type="date" id="data" name="data" required><br><br>
+
+              <label for="dinheiro">Valor:</label><br>
+              <input type="number" id="dinheiro" name="dinheiro" required><br><br>
+              
+              <input type="submit" value="Criar">
+          </form>
+          <!-- <ul class="menu">
+            <li><a href="{{ url_for('criarConta') }}">Cadastrar</a></li>
+          </ul> -->
+        </nav></strong>
+      </div>
+    </header>
+    
+    {% block content %}
+    {% endblock %}
+    
+ </body>
+</html>

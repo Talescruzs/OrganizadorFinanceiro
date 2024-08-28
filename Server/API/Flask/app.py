@@ -69,7 +69,7 @@ def set_account():
         data = request.json["data"]
         if(idUser == 0):
             return ["no user find"]
-        if(c.create_account(bank=data["banco"], typ=data["tipo"], date=data["data"], idUser=data, money=data["dinheiro"])):
+        if(c.create_account(bank=data["banco"], typ=data["tipo"], date=data["data"], idUser=idUser, money=data["dinheiro"])):
             return data
         return ["error to find user"]
     except KeyError as e:
