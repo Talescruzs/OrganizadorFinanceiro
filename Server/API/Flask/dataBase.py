@@ -115,7 +115,7 @@ class Connection(object):
             if self.connection.is_connected():
                 # Inserir um novo usuário
                 query = f"SELECT {columns} FROM {table} WHERE {where}"
-                self.cursor.execute(query)
+                cursor.execute(query)
                 results = self.cursor.fetchall()
                 return results
             print(f"{table} '{results}'")
@@ -132,7 +132,7 @@ class Connection(object):
             if self.connection.is_connected():
                 # Inserir um novo usuário
                 query = f"DELETE FROM {table} WHERE {where}"
-                self.cursor.execute(query)
+                cursor.execute(query)
                 self.connection.commit()
             print(f"{table}(s) removido(s) onde {where}.")
             return True
