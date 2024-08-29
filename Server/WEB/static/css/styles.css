@@ -1,0 +1,11 @@
+/* Importando o framework Bootstrap */
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+
+/* Adicionando customizações adicionais se necessário */
+body {
+    font-family: Arial, sans-serif;
+    /* background-color: blue; */
+}
+/* h1{
+    background-color: blue;
+} */

@@ -1,28 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Contas</title>
-    <style>
-        table {
-            width: 50%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
-</head>
-<body>
+{% extends "contents/head.html" %}
+
+{% block title %}Contas{% endblock %}
+{% block content %}
+<div class="container">
     <h1 style="text-align:center;">Lista de Contas</h1>
     <form action="/contas/criar">
         <input type="submit" value="Cadastrar">
     </form>
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>banco</th>
@@ -41,5 +26,5 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -35,7 +35,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route("/")
 def home():
     if 'user' in session:
-        return render_template("view/home.html", nome=session["user"]["nome"])
+        return render_template("home.html", nome=session["user"]["nome"])
     return redirect(url_for('login'))
 
 
@@ -50,7 +50,7 @@ def register():
         response = requests.post(url=url, json=json)
         session['user'] = response.json()["user"]
         return redirect(url_for('home'))
-    return render_template("view/register.html")
+    return render_template("register.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -64,8 +64,8 @@ def login():
         if(response.json() != [None]):
             session['user'] = response.json()["user"]
             return redirect(url_for('home'))
-        return render_template("view/login.html", alerta="Errado, tente novamente")
-    return render_template("view/login.html")
+        return render_template("login.html", alerta="Errado, tente novamente")
+    return render_template("login.html")
 
 @app.post("/cadastrar")
 def cadastrar():
@@ -91,7 +91,7 @@ def contas():
     print(response.json())
 
 
-    return render_template("view/contas.html", contas=response.json())
+    return render_template("contas.html", contas=response.json())
 
 @app.route("/contas/criar", methods=['GET', 'POST'])
 def criarConta():
@@ -113,7 +113,7 @@ def criarConta():
         response = requests.post(url=url, json=json)
         return redirect(url_for('contas'))
 
-    return render_template("view/criarContas.html")
+    return render_template("criarContas.html")
 
     
 if __name__ == "__main__":
