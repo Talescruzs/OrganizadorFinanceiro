@@ -116,7 +116,7 @@ class Connection(object):
                 # Inserir um novo usuário
                 query = f"SELECT {columns} FROM {table} WHERE {where}"
                 cursor.execute(query)
-                results = self.cursor.fetchall()
+                results = cursor.fetchall()
                 return results
             print(f"{table} '{results}'")
         except Error as e:
