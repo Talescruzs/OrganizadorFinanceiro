@@ -32,7 +32,7 @@ app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def home():
     if 'user' in session:
         return render_template("home.html", nome=session["user"]["nome"])
@@ -72,7 +72,7 @@ def cadastrar():
     return redirect(url_for('home'))
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET'])
 def logout():
     # remove the username from the session if it's there
     session.pop('user', None)

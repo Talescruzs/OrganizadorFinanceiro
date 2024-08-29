@@ -1,11 +1,26 @@
 /* Importando o framework Bootstrap */
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
 
-/* Adicionando customizações adicionais se necessário */
 body {
     font-family: Arial, sans-serif;
-    /* background-color: blue; */
 }
-/* h1{
-    background-color: blue;
-} */
+.btn-container, .register-form {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.btn-container {
+    margin-right: 10px;
+}
+
+.container {
+    text-align: center;
+}
+
+.login-form, .register-form {
+    display: inline; 
+}
+
+.btn {
+    margin: 0;
+}

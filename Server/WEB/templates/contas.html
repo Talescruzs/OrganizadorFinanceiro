@@ -1,12 +1,9 @@
-{% extends "contents/head.html" %}
-
+{% extends "contents/headComplete.html" %}
 {% block title %}Contas{% endblock %}
+{% block h1 %}Lista de Contas{% endblock %}
+
 {% block content %}
 <div class="container">
-    <h1 style="text-align:center;">Lista de Contas</h1>
-    <form action="/contas/criar">
-        <input type="submit" value="Cadastrar">
-    </form>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -17,14 +14,26 @@
         </thead>
         <tbody>
             {% for conta in contas %}
-            <tr>
-                <td>{{ conta[1] }}</td>
-                <!-- <td>{{ conta[2] }}</td> -->
-                <td>{{ conta[3] }}</td>
-                <td>{{ conta[4] }}</td>
-            </tr>
+                {% if conta[2] == 'I' %}
+                    <tr class="p-3 mb-2 bg-primary text-white">
+                        <td>{{ conta[1] }}</td>
+                        <!-- <td>{{ conta[2] }}</td> -->
+                        <td>{{ conta[3] }}</td>
+                        <td>{{ conta[4] }}</td>
+                    </tr>
+                {% elif conta[2] == 'D' %}
+                    <tr class="p-3 mb-2 bg-secondary text-white">
+                        <td>{{ conta[1] }}</td>
+                        <!-- <td>{{ conta[2] }}</td> -->
+                        <td>{{ conta[3] }}</td>
+                        <td>{{ conta[4] }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
+    <form action="/contas/criar">
+        <input type="submit" class="btn btn-success" value="Cadastrar">
+    </form>
 </div>
 {% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Meu Site{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="my-4">{% block h1 %}Meu Site{% endblock %}</h1>
+        <div class="btn-group" role="group" aria-label="Navegação">
+            <form action="/" method="GET">
+                <button type="submit" class="btn btn-primary">Home</button>
+            </form>
+            <form action="/contas" method="GET">
+                <button type="submit" class="btn btn-secondary">Contas</button>
+            </form>
+            <form action="/logout" method="GET">
+                <button type="submit" class="btn btn-dark">Logout</button>
+            </form>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

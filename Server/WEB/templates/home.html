@@ -1,18 +1,9 @@
-{% extends "contents/head.html" %}
-
-{% block title %}Página de Boas-Vindas{% endblock %}
+{% extends "contents/headComplete.html" %}
+{% block title %}Home{% endblock %}
+{% block h1 %}Olá, {{ nome }}{% endblock %}
 
 {% block content %}
 <div class="container">
-    <!-- Mensagem de boas-vindas ao usuário -->
-    <h2>Bem-vindo, {{ nome }}!</h2>
-    
-    <!-- Botão de logout -->
-    <form action="/logout">
-        <input type="submit" value="Logout">
-    </form>
-    <form action="/contas">
-        <input type="submit" value="Contas">
-    </form>
+    <p>pipipippopopo</p>
 </div>
 {% endblock %}
