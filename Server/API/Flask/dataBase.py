@@ -15,19 +15,23 @@ class Connection(object):
             password=self.user_password,
             database=self.db_name
         )
-        self.cursor = self.connection.cursor()
+        # self.cursor = self.connection.cursor()
 
     def create_database(self):
+        cursor = self.connection.cursor()
         try:
             # Conectar ao servidor MySQL
             if self.connection.is_connected():
                 # Criar banco de dados
-                self.cursor.execute(f'''CREATE DATABASE IF NOT EXISTS {self.db_name}''')
+                cursor.execute(f'''CREATE DATABASE IF NOT EXISTS {self.db_name}''')
                 print(f"Banco de dados '{self.db_name}' criado com sucesso!")
         except Error as e:
             print(f"Erro ao criar o banco de dados: {e}")
+        finally:
+            cursor.close()
 
     def create_tables(self):
+        cursor = self.connection.cursor()
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
@@ -38,7 +42,7 @@ class Connection(object):
                     nome VARCHAR(100) NOT NULL,
                     senha VARCHAR(45) NOT NULL,
                 )'''
-                self.cursor.execute(create_table_query)
+                cursor.execute(create_table_query)
                 print(f"Tabela Usuarios criada com sucesso no banco de dados '{self.db_name}'!")
                 create_table_query = f'''
                 CREATE TABLE IF NOT EXISTS Contas (
@@ -50,7 +54,7 @@ class Connection(object):
                     id_usuario INT,
                     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id) ON DELETE CASCADE
                 )'''
-                self.cursor.execute(create_table_query)
+                cursor.execute(create_table_query)
                 print(f"Tabela Contas criada com sucesso no banco de dados '{self.db_name}'!")
                 create_table_query = f'''
                 CREATE TABLE IF NOT EXISTS Rotinas (
@@ -65,7 +69,7 @@ class Connection(object):
                     id_conta INT,
                     FOREIGN KEY (id_conta) REFERENCES Contas(id) ON DELETE CASCADE
                 )'''
-                self.cursor.execute(create_table_query)
+                cursor.execute(create_table_query)
                 print(f"Tabela Rotinas criada com sucesso no banco de dados '{self.db_name}'!")
                 create_table_query = f'''
                 CREATE TABLE IF NOT EXISTS Historico (
@@ -77,12 +81,15 @@ class Connection(object):
                     id_conta INT,
                     FOREIGN KEY (id_conta) REFERENCES Contas(id) ON DELETE CASCADE
                 )'''
-                self.cursor.execute(create_table_query)
+                cursor.execute(create_table_query)
                 print(f"Tabela Historico criada com sucesso no banco de dados '{self.db_name}'!")
         except Error as e:
             print(f"Erro ao criar a tabela: {e}")
+        finally:
+            cursor.close()
 
     def __insert(self, table: str, columns: str, values: str):
+        cursor = self.connection.cursor()
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
@@ -91,15 +98,18 @@ class Connection(object):
                 INSERT INTO {0} ({1})
                 VALUES ({2});
                 '''.format(table, columns, values)
-                self.cursor.execute(insert_user_query)
+                cursor.execute(insert_user_query)
                 self.connection.commit()  # Confirmar a transação
             print(f"'{values}' inserido com sucesso na tabela '{table}'!")
             return True
         except Error as e:
             print(f"Erro ao inserir {table}: {e}")
             return False
+        finally:
+            cursor.close()
 
     def __select(self, table: str, columns: str, where: str):
+        cursor = self.connection.cursor()
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
@@ -112,8 +122,11 @@ class Connection(object):
         except Error as e:
             print(f"Erro no select {table}: {e}")
             return False
+        finally:
+            cursor.close()
 
     def __delete(self, table: str, where: str):
+        cursor = self.connection.cursor()
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
@@ -126,6 +139,8 @@ class Connection(object):
         except Error as e:
             print(f"Erro ao remover {table}: {e}")
             return False
+        finally:
+            cursor.close()
 
     def create_user(self, nome: str, senha: str):
         return self.__insert(table="Usuarios", columns="nome, senha", values="'{0}', '{1}'".format(nome, senha))
@@ -179,7 +194,7 @@ class Connection(object):
 
     def close_connection(self):
         if self.connection.is_connected():
-            self.cursor.close()
+            # self.cursor.close()
             self.connection.close()
             print("Conexão ao MySQL encerrada.")
 

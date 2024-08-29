@@ -25,13 +25,18 @@
     <table>
         <thead>
             <tr>
-                <th>Nome da Conta</th>
+                <th>banco</th>
+                <th>valor</th>
+                <th>dia</th>
             </tr>
         </thead>
         <tbody>
             {% for conta in contas %}
             <tr>
-                <td>{{ conta }}</td>
+                <td>{{ conta[1] }}</td>
+                <!-- <td>{{ conta[2] }}</td> -->
+                <td>{{ conta[3] }}</td>
+                <td>{{ conta[4] }}</td>
             </tr>
             {% endfor %}
         </tbody>

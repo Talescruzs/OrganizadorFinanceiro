@@ -93,22 +93,21 @@ def contas():
 
     return render_template("view/contas.html", contas=response.json())
 
-@app.route("/contas/criar")
+@app.route("/contas/criar", methods=['GET', 'POST'])
 def criarConta():
     if 'user' not in session:
         return redirect(url_for('login'))
 
     if request.method == 'POST':
         url = "{0}/set_account".format(url_api)
+        print(session['user'])
         json = {
-            'user':{
-                session['user']
-            },
-            'data':{
-                request.form['banco'],
-                request.form['tipo'],
-                request.form['data'],
-                request.form['dinheiro']
+            "user":session['user'],
+            "data":{
+                'banco':request.form['banco'],
+                'tipo':request.form['tipo'],
+                'data':request.form['data'],
+                'dinheiro':request.form['dinheiro']
             }
         }
         response = requests.post(url=url, json=json)
