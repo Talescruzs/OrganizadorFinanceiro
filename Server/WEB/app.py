@@ -117,7 +117,18 @@ def criarConta():
 
 @app.route("/contas/deleta<int:conta_id>", methods=['POST'])
 def deletaConta(conta_id):
-    print(conta_id)
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    url = "{0}/delete_account".format(url_api)
+    json = {
+        "user":session['user'],
+        "data":{
+            "id":conta_id
+        }
+    }
+    response = requests.delete(url=url, json=json)
+    print(response.json())
     return redirect(url_for('contas'))
 
     
