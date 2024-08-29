@@ -115,6 +115,11 @@ def criarConta():
 
     return render_template("criarContas.html")
 
+@app.route("/contas/deleta<int:conta_id>", methods=['POST'])
+def deletaConta(conta_id):
+    print(conta_id)
+    return redirect(url_for('contas'))
+
     
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
