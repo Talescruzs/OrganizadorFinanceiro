@@ -1,6 +1,6 @@
 from flask import Flask, make_response, request, jsonify
 from dataBase import Connection
-from controle import verificaUser
+from controle import verificaUser, verificaAccount
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -100,6 +100,31 @@ def get_account():
         #         where = where+"{0} = '{1}' ".format(keys[i], values[i])
         return make_response(
             c.search_account(where=where)
+        )
+    except:
+        return ["error"]
+
+@app.route('/delete_account', methods=['DELETE'])
+def delete_account():
+    try:
+        # account = request.json
+        # keys = list(account.keys())
+        # values = list(account.values())
+        # where = ""
+        idUser = verificaUser(request.json["user"], c)
+        idAccount = request.json["data"]["id"]
+        if(idUser == 0):
+            return ["no user find"]
+
+        if(verificaAccount(idUser, idAccount, c) == 0):
+            return ["no account find"]
+
+        deleted = c.search_account(where="id = {0}".format(idAccount))
+
+        c.remove_account(where="id = {0}".format(idAccount))
+
+        return make_response(
+            deleted
         )
     except:
         return ["error"]
