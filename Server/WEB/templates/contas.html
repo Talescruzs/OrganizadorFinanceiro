@@ -9,41 +9,39 @@
             <tr>
                 <th>banco</th>
                 <th>valor</th>
-                <th>dia</th>
+                <!-- <th>dia</th> -->
                 <th>ação</th>
             </tr>
         </thead>
         <tbody>
             {% for conta in contas %}
-                {% if conta[2] == 'I' %}
-                    <tr class="p-3 mb-2 bg-primary text-white">
-                        <td>{{ conta[1] }}</td>
-                        <!-- <td>{{ conta[2] }}</td> -->
-                        <td>{{ conta[3] }}</td>
-                        <td>{{ conta[4] }}</td>
-                        <td>
-                            <!-- Formulário para excluir a conta -->
-                            <form action="{{ url_for('deletaConta', conta_id=conta[0]) }}" method="POST" style="display: inline;">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% elif conta[2] == 'D' %}
+                {% if conta[2] == 'P' %}
+                    <tr class="p-3 mb-2 bg-info text-white">
+                {% elif conta[2] == 'C' %}
                     <tr class="p-3 mb-2 bg-secondary text-white">
+                {% else %}
+                    <tr class="p-3 mb-2 bg-danger text-white">
+                {% endif %}
                         <td>{{ conta[1] }}</td>
                         <!-- <td>{{ conta[2] }}</td> -->
                         <td>{{ conta[3] }}</td>
-                        <td>{{ conta[4] }}</td>
+                        <!-- <td>{{ conta[4] }}</td> -->
                         <td>
                             <!-- Formulário para excluir a conta -->
                             <form action="{{ url_for('deletaConta', conta_id=conta[0]) }}" method="POST" style="display: inline;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                             </form>
+                            <form action="{{ url_for('deletaConta', conta_id=conta[0]) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-primary btn-sm">Editar</button>
+                            </form>
+                            <form action="{{ url_for('deletaConta', conta_id=conta[0]) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn bg-warning btn-sm">Rotinas</button>
+                            </form>
                         </td>
                     </tr>
-                {% endif %}
             {% endfor %}
         </tbody>
     </table>
