@@ -1,0 +1,50 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table usuarios {
+  id int [pk]
+  senha hash [not null]
+  autenticador hash [not null]
+  nome varchar2 [not null]
+  email varchar2
+}
+
+Table contas {
+  id int [pk]
+  nome_banco varchar2
+  tipo char [not null]
+  valor int
+}
+
+Table usuario_conta {
+  id int [pk]
+  fk_usuario int [ref: - usuarios.id]
+  fk_conta int [ref: - contas.id]
+  data_vinculo datetime
+  valida bool
+}
+
+Table movimentacoes {
+  id int [primary key]
+  conta_fim int [ref: - contas.id]
+  conta_ini int [ref: - contas.id]
+  valor int 
+  data datetime
+}
+
+Table rotina {
+  id int [primary key]
+  conta_fim int [ref: - contas.id]
+  conta_ini int [ref: - contas.id]
+  valor int 
+  tipo char
+  data_prox datetime
+}
+
+Table investimentos {
+  id int [pk]
+  fk_conta int [ref: - contas.id]
+  data_ini date
+  cod varchar2
+  valor int
+}
