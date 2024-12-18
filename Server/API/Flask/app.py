@@ -77,70 +77,62 @@ def set_account():
     except:
         return ["error"]
 
-@app.route('/get_account', methods=['GET', 'POST'])
-def get_account():
+@app.route('/get_accounts', methods=['GET', 'POST'])
+def get_accounts():
     response = list()
 
-    userController = UserController()
-    user = request.json["user"]
-    userAccounts = userController.selectUserAccounts(user)
-    accountController = AccountController()
+    try:
+        userController = UserController()
+        user = request.json["user"]
+        userAccounts = userController.selectUserAccounts(user)
+        accountController = AccountController()
 
-    for r in userAccounts:
-        account = accountController.selectAccountById(r[2])
-        account['data'] = r[3]
-        account['valida'] = r[4]
-        response.append(account)
+        for r in userAccounts:
+            account = accountController.selectAccountById(r[2])
+            account['data'] = r[3]
+            account['valida'] = r[4]
+            response.append(account)
+
+        return make_response(
+            response
+        )
+    except:
+        return [None]
+
+@app.route('/delete_account', methods=['DELETE'])
+def delete_account():
+    controller = AccountController()
+    user = request.json["user"]
+    accountId = request.json["data"]["idConta"]
+    response = controller.deleteAccountById(user, accountId)
 
     return make_response(
-        response
-    )
+        jsonify(
+            status=response
+        )
+    ) 
     # try:
     #     # account = request.json
     #     # keys = list(account.keys())
     #     # values = list(account.values())
     #     # where = ""
     #     idUser = verificaUser(request.json["user"], c)
+    #     idAccount = request.json["data"]["id"]
     #     if(idUser == 0):
     #         return ["no user find"]
 
-    #     where = "id_usuario = {0} ".format(idUser)
-    #     # for i in range(len(account)):
-    #     #     print(keys[i], values[i])
-    #     #     if(keys[i] != "user"):
-    #     #         if(i!=0):
-    #     #             where= where+"and "
-    #     #         where = where+"{0} = '{1}' ".format(keys[i], values[i])
+    #     if(verificaAccount(idUser, idAccount, c) == 0):
+    #         return ["no account find"]
+
+    #     deleted = c.search_account(where="id = {0}".format(idAccount))
+
+    #     c.remove_account(where="id = {0}".format(idAccount))
+
     #     return make_response(
-    #         c.search_account(where=where)
+    #         deleted
     #     )
     # except:
     #     return ["error"]
-
-# @app.route('/delete_account', methods=['DELETE'])
-# def delete_account():
-#     try:
-#         # account = request.json
-#         # keys = list(account.keys())
-#         # values = list(account.values())
-#         # where = ""
-#         idUser = verificaUser(request.json["user"], c)
-#         idAccount = request.json["data"]["id"]
-#         if(idUser == 0):
-#             return ["no user find"]
-
-#         if(verificaAccount(idUser, idAccount, c) == 0):
-#             return ["no account find"]
-
-#         deleted = c.search_account(where="id = {0}".format(idAccount))
-
-#         c.remove_account(where="id = {0}".format(idAccount))
-
-#         return make_response(
-#             deleted
-#         )
-#     except:
-#         return ["error"]
 
 # @app.route('/set_routines', methods=['POST'])
 # def set_routines():

@@ -10,12 +10,12 @@ class AccountController(BaseController):
         super().__init__()
     
     def createAccount(self, user, data):
-        model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
-        response = False
         userId = UserController().userId(user['nome'], user['senha'], user['hash'])
         if userId == 0:
-            model.close()
             return False
+
+        model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
+        response = False
 
         response = model.insertAccount(data['nomeBanco'], data['tipoConta'], data['valor'])
         if not response:
@@ -44,8 +44,19 @@ class AccountController(BaseController):
         accountById = model.selectAccountById(accountId)
         model.close()
         response = {
+            'id':accountById[0],
             'nomeBanco':accountById[1],
             'tipo':accountById[2],
             'valor':accountById[3],
         }
+        return response
+    
+    def deleteAccountById(self, user, accountId):
+        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        if userId == 0:
+            return False
+
+        model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
+        response = model.deleteAccountById(accountId)
+        model.close()
         return response

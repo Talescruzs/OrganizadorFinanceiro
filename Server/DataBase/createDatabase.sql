@@ -48,13 +48,20 @@ CREATE TABLE `investimentos` (
   `valor` INT
 );
 
-ALTER TABLE `usuario_conta` ADD FOREIGN KEY (`fk_usuario`) REFERENCES `usuarios` (`id`);
-ALTER TABLE `usuario_conta` ADD FOREIGN KEY (`fk_conta`) REFERENCES `contas` (`id`);
+ALTER TABLE `usuario_conta` 
+ADD FOREIGN KEY (`fk_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+ALTER TABLE `usuario_conta` 
+ADD FOREIGN KEY (`fk_conta`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `movimentacoes` ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`);
-ALTER TABLE `movimentacoes` ADD FOREIGN KEY (`conta_ini`) REFERENCES `contas` (`id`);
+ALTER TABLE `movimentacoes` 
+ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
+ALTER TABLE `movimentacoes` 
+ADD FOREIGN KEY (`conta_ini`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `rotina` ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`);
-ALTER TABLE `rotina` ADD FOREIGN KEY (`conta_ini`) REFERENCES `contas` (`id`);
+ALTER TABLE `rotina` 
+ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
+ALTER TABLE `rotina` 
+ADD FOREIGN KEY (`conta_ini`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `investimentos` ADD FOREIGN KEY (`fk_conta`) REFERENCES `contas` (`id`);
+ALTER TABLE `investimentos` 
+ADD FOREIGN KEY (`fk_conta`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
