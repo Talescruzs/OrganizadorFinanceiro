@@ -87,7 +87,10 @@ def get_account():
     accountController = AccountController()
 
     for r in userAccounts:
-        response.append(accountController.selectAccountById(r[2]))
+        account = accountController.selectAccountById(r[2])
+        account['data'] = r[3]
+        account['valida'] = r[4]
+        response.append(account)
 
     return make_response(
         response

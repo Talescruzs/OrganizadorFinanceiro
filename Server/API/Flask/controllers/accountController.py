@@ -41,6 +41,11 @@ class AccountController(BaseController):
 
     def selectAccountById(self, accountId):
         model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
-        response = model.selectAccountById(accountId)
+        accountById = model.selectAccountById(accountId)
         model.close()
+        response = {
+            'nomeBanco':accountById[1],
+            'tipo':accountById[2],
+            'valor':accountById[3],
+        }
         return response
