@@ -16,7 +16,9 @@ class UserController(BaseController):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
         response = model.login(name, password, hashCode)
         model.close() 
-        return response
+        if response == 0 or response == '0':
+            return False
+        return True
 
     def user(self, name, password, hashCode):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
@@ -29,3 +31,10 @@ class UserController(BaseController):
         response = model.userId(name, password, hashCode)
         model.close() 
         return response
+
+    def selectUserAccounts(self, user):
+        model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
+        userAccounts = model.selectUserAccounts(user['nome'], user['senha'], user['hash'])
+        
+        model.close() 
+        return userAccounts

@@ -1,23 +1,8 @@
 from flask import Flask, make_response, request, jsonify
-from dataBase import Connection
+# from dataBase import Connection
 from controllers.userController import UserController
 from controllers.accountController import AccountController
-from controle import verificaUser, verificaAccount
-# from dotenv import load_dotenv
-# from pathlib import Path
-# import os
-
-# try:
-#     dotenv_path = Path('./.env')
-#     load_dotenv(dotenv_path=dotenv_path)
-# except:
-#     pass
-
-# host_name = os.getenv('MYSQL_HOSNAME')
-# user_name = os.getenv('MYSQL_USER')
-# user_password = os.getenv('MYSQL_PASSWORD')
-# db_name = os.getenv('MYSQL_DATABASE')
-# c = Connection(host_name, user_name, user_password, db_name)
+# from controle import verificaUser, verificaAccount
 
 app = Flask(__name__)
 
@@ -41,7 +26,7 @@ def register():
             ) 
         return [None]
     except:
-        return ["error"]
+        return [None]
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -49,16 +34,11 @@ def login():
         user = request.json
         controller = UserController()
         response = controller.login(name=user["nome"], password=user["senha"], hashCode=user["hash"])
-        if(response != '0'):
-            data = {
-                'login':response
-            }
-            return make_response(
-                jsonify(
-                    user=data
-                )
-            ) 
-        return [None]
+        return make_response(
+            jsonify(
+                login=response
+            )
+        ) 
     except:
         return ["error"]
 
@@ -83,45 +63,49 @@ def user():
 
 @app.route('/set_account', methods=['POST'])
 def set_account():
-    # try:
-    controller = AccountController()
+    try:
+        controller = AccountController()
+        user = request.json["user"]
+        data = request.json["data"]
+        response = controller.createAccount(user, data)
+
+        return make_response(
+            jsonify(
+                status=response
+            )
+        ) 
+    except:
+        return ["error"]
+
+@app.route('/get_account', methods=['GET', 'POST'])
+def get_account():
+    controller = UserController()
     user = request.json["user"]
-    data = request.json["data"]
-    response = controller.createAccount(user, data)
-    data = {
-        'login':response
-    }
+    response = controller.selectUserAccounts(user)
     return make_response(
-        jsonify(
-            user=data
-        )
-    ) 
+        response
+    )
+    # try:
+    #     # account = request.json
+    #     # keys = list(account.keys())
+    #     # values = list(account.values())
+    #     # where = ""
+    #     idUser = verificaUser(request.json["user"], c)
+    #     if(idUser == 0):
+    #         return ["no user find"]
+
+    #     where = "id_usuario = {0} ".format(idUser)
+    #     # for i in range(len(account)):
+    #     #     print(keys[i], values[i])
+    #     #     if(keys[i] != "user"):
+    #     #         if(i!=0):
+    #     #             where= where+"and "
+    #     #         where = where+"{0} = '{1}' ".format(keys[i], values[i])
+    #     return make_response(
+    #         c.search_account(where=where)
+    #     )
     # except:
     #     return ["error"]
-
-# @app.route('/get_account', methods=['GET', 'POST'])
-# def get_account():
-#     try:
-#         # account = request.json
-#         # keys = list(account.keys())
-#         # values = list(account.values())
-#         # where = ""
-#         idUser = verificaUser(request.json["user"], c)
-#         if(idUser == 0):
-#             return ["no user find"]
-
-#         where = "id_usuario = {0} ".format(idUser)
-#         # for i in range(len(account)):
-#         #     print(keys[i], values[i])
-#         #     if(keys[i] != "user"):
-#         #         if(i!=0):
-#         #             where= where+"and "
-#         #         where = where+"{0} = '{1}' ".format(keys[i], values[i])
-#         return make_response(
-#             c.search_account(where=where)
-#         )
-#     except:
-#         return ["error"]
 
 # @app.route('/delete_account', methods=['DELETE'])
 # def delete_account():

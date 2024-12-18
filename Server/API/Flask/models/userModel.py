@@ -89,3 +89,24 @@ class UserModel(BaseModel):
             print(f"Erro no select: {e}")
             cursor.close()
             return response
+
+    def selectUserAccounts(self, name, password, hashCode):
+        userId = self.userId(name, password, hashCode)
+        if(userId == 0):
+            return 0
+
+        cursor = self.connection.cursor()
+        try:
+            if self.connection.is_connected():
+                # Inserir um novo usuário
+                query = f"SELECT * FROM usuario_conta WHERE fk_usuario = {userId}"
+                cursor.execute(query)
+                results = cursor.fetchall()
+                cursor.close()
+
+                response = results
+            return response
+        except Error as e:
+            print(f"Erro no select: {e}")
+            cursor.close()
+            return response

@@ -9,59 +9,59 @@ class AccountModel(BaseModel):
 
     def insertAccount(self, bankName, accountType, value):
         cursor = self.connection.cursor()
-        try:
-            if self.connection.is_connected():
-                insert_user_query = '''
-                INSERT INTO contas (nome_banco, tipo, valor)
-                VALUES (%s, %s, %s);
-                '''
-                values = (bankName, accountType, value)
-                cursor.execute(insert_user_query, values)
-                self.connection.commit()
-                cursor.close()
-                return True
-        except Error as e:
+        # try:
+        if self.connection.is_connected():
+            insert_user_query = '''
+            INSERT INTO contas (nome_banco, tipo, valor)
+            VALUES (%s, %s, %s);
+            '''
+            values = (bankName, accountType, value)
+            cursor.execute(insert_user_query, values)
+            self.connection.commit()
             cursor.close()
-            return False
-        finally:
-            cursor.close()
-            return False
+            return True
+        # except Error as e:
+        #     cursor.close()
+        #     return False
+        # finally:
+        #     cursor.close()
+        #     return False
 
     def accountId(self, bankName, accountType, value):
         cursor = self.connection.cursor()
         response = 0
-        try:
-            if self.connection.is_connected():
-                # Inserir um novo usuário
-                query = f"SELECT * FROM contas WHERE nome_banco = '{bankName}' and tipo = '{accountType}' and valor = {value}"
-                cursor.execute(query)
-                results = cursor.fetchall()
-                cursor.close()
-                if len(results) == 1:
-                    response = results[0][0]
-            return response
-        except Error as e:
-            print(f"Erro no select: {e}")
+        # try:
+        if self.connection.is_connected():
+            # Inserir um novo usuário
+            query = f"SELECT * FROM contas WHERE nome_banco = '{bankName}' and tipo = '{accountType}' and valor = {value}"
+            cursor.execute(query)
+            results = cursor.fetchall()
             cursor.close()
-            return response
+            if len(results) == 1:
+                response = results[0][0]
+        return response
+        # except Error as e:
+        #     cursor.close()
+        #     return response
+
 
     def linkUserAccount(self, idUser, idAccount, date, valid):
         cursor = self.connection.cursor()
-        try:
-            if self.connection.is_connected():
-                insert_user_query = '''
-                INSERT INTO usuario_conta (fk_usuario, fk_conta, data_vinculo, valida)
-                VALUES (%s, %s, %s, %s);
-                '''
-                values = (idUser, idAccount, date, valid)
-                cursor.execute(insert_user_query, values)
-                self.connection.commit()
-                cursor.close()
-                return True
-        except Error as e:
+        # try:
+        if self.connection.is_connected():
+            insert_user_query = '''
+            INSERT INTO usuario_conta (fk_usuario, fk_conta, data_vinculo, valida)
+            VALUES (%s, %s, %s, %s);
+            '''
+            values = (idUser, idAccount, date, valid)
+            cursor.execute(insert_user_query, values)
+            self.connection.commit()
             cursor.close()
-            return False
-        finally:
-            cursor.close()
-            return False
+            return True
+        # except Error as e:
+        #     cursor.close()
+        #     return False
+        # finally:
+        #     cursor.close()
+        #     return False
     

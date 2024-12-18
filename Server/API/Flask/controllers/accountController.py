@@ -17,12 +17,12 @@ class AccountController(BaseController):
             model.close()
             return False
 
-        response = model.insertAccount(data['bankName'], data['accountType'], data['value'])
+        response = model.insertAccount(data['nomeBanco'], data['tipoConta'], data['valor'])
         if not response:
             model.close()
             return False
         
-        accountId = model.accountId(data['bankName'], data['accountType'], data['value'])
+        accountId = model.accountId(data['nomeBanco'], data['tipoConta'], data['valor'])
         if accountId == 0: 
             model.close()
             return False
