@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   db-finan:
-    build: ./db/
+    build: ./DataBase/
     # restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -16,7 +16,7 @@ services:
     #   - msqls_data:/var/lib/mysql/data
 
   flask-api:
-    build: ./Flask/
+    build: ./API/Flask/
     # volumes:
     #   - .:/app
     ports:
