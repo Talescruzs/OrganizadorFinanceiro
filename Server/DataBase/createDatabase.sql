@@ -25,6 +25,7 @@ CREATE TABLE `usuario_conta` (
 
 CREATE TABLE `movimentacoes` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `desc` VARCHAR(255),
   `conta_fim` INT,
   `conta_ini` INT,
   `valor` INT,
@@ -33,6 +34,7 @@ CREATE TABLE `movimentacoes` (
 
 CREATE TABLE `rotina` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `desc` VARCHAR(255),
   `conta_fim` INT,
   `conta_ini` INT,
   `valor` INT,
@@ -42,6 +44,7 @@ CREATE TABLE `rotina` (
 
 CREATE TABLE `investimentos` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `desc` VARCHAR(255),
   `fk_conta` INT,
   `data_ini` DATE,
   `cod` VARCHAR(255),

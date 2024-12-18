@@ -101,38 +101,19 @@ def get_accounts():
 
 @app.route('/delete_account', methods=['DELETE'])
 def delete_account():
-    controller = AccountController()
-    user = request.json["user"]
-    accountId = request.json["data"]["idConta"]
-    response = controller.deleteAccountById(user, accountId)
+    try:
+        controller = AccountController()
+        user = request.json["user"]
+        accountId = request.json["data"]["idConta"]
+        response = controller.deleteAccountById(user, accountId)
 
-    return make_response(
-        jsonify(
-            status=response
-        )
-    ) 
-    # try:
-    #     # account = request.json
-    #     # keys = list(account.keys())
-    #     # values = list(account.values())
-    #     # where = ""
-    #     idUser = verificaUser(request.json["user"], c)
-    #     idAccount = request.json["data"]["id"]
-    #     if(idUser == 0):
-    #         return ["no user find"]
-
-    #     if(verificaAccount(idUser, idAccount, c) == 0):
-    #         return ["no account find"]
-
-    #     deleted = c.search_account(where="id = {0}".format(idAccount))
-
-    #     c.remove_account(where="id = {0}".format(idAccount))
-
-    #     return make_response(
-    #         deleted
-    #     )
-    # except:
-    #     return ["error"]
+        return make_response(
+            jsonify(
+                status=response
+            )
+        ) 
+    except:
+        return [None]
 
 # @app.route('/set_routines', methods=['POST'])
 # def set_routines():
