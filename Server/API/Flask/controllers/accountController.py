@@ -38,3 +38,9 @@ class AccountController(BaseController):
         response = model.linkUserAccount(userId, accountId, date.date(), valid)
         model.close()
         return response
+
+    def selectAccountById(self, accountId):
+        model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
+        response = model.selectAccountById(accountId)
+        model.close()
+        return response

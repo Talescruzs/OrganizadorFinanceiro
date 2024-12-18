@@ -64,4 +64,15 @@ class AccountModel(BaseModel):
         # finally:
         #     cursor.close()
         #     return False
-    
+
+    def selectAccountById(self, accountId):
+        response = 0
+        cursor = self.connection.cursor()
+        if self.connection.is_connected():
+            query = f"SELECT * FROM contas WHERE id = {accountId}"
+            cursor.execute(query)
+            results = cursor.fetchall()
+            cursor.close()
+            if len(results) == 1:
+                response = results
+        return response[0]

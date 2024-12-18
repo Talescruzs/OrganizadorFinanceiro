@@ -79,9 +79,16 @@ def set_account():
 
 @app.route('/get_account', methods=['GET', 'POST'])
 def get_account():
-    controller = UserController()
+    response = list()
+
+    userController = UserController()
     user = request.json["user"]
-    response = controller.selectUserAccounts(user)
+    userAccounts = userController.selectUserAccounts(user)
+    accountController = AccountController()
+
+    for r in userAccounts:
+        response.append(accountController.selectAccountById(r[2]))
+
     return make_response(
         response
     )
