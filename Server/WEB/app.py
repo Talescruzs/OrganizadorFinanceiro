@@ -5,11 +5,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 
-try:
-    dotenv_path = Path('./.env')
-    load_dotenv(dotenv_path=dotenv_path)
-except:
-    pass
+dotenv_path = Path('./.env')
+load_dotenv(dotenv_path=dotenv_path)
 
 url_api = os.getenv('URL_BASE')
 
@@ -45,7 +42,8 @@ def register():
         url = "{0}/register".format(url_api)
         json = {
             "nome":request.form['nome'],
-            "senha":request.form['senha']
+            "senha":request.form['senha'],
+            "email":request.form['email']
         }
         response = requests.post(url=url, json=json)
         session['user'] = response.json()["user"]
@@ -78,58 +76,58 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('home'))
 
-@app.route("/contas")
-def contas():
-    if 'user' not in session:
-        return redirect(url_for('login'))
+# @app.route("/contas")
+# def contas():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
 
-    url = "{0}/get_account".format(url_api)
-    json = {
-        "user":session['user']
-    }
-    response = requests.post(url=url, json=json)
-    print(response.json())
+#     url = "{0}/get_account".format(url_api)
+#     json = {
+#         "user":session['user']
+#     }
+#     response = requests.post(url=url, json=json)
+#     print(response.json())
 
 
-    return render_template("contas.html", contas=response.json())
+#     return render_template("contas.html", contas=response.json())
 
-@app.route("/contas/criar", methods=['GET', 'POST'])
-def criarConta():
-    if 'user' not in session:
-        return redirect(url_for('login'))
+# @app.route("/contas/criar", methods=['GET', 'POST'])
+# def criarConta():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
 
-    if request.method == 'POST':
-        url = "{0}/set_account".format(url_api)
-        print(session['user'])
-        json = {
-            "user":session['user'],
-            "data":{
-                'banco':request.form['banco'],
-                'tipo':request.form['tipo'],
-                'data':request.form['data'],
-                'dinheiro':request.form['dinheiro']
-            }
-        }
-        response = requests.post(url=url, json=json)
-        return redirect(url_for('contas'))
+#     if request.method == 'POST':
+#         url = "{0}/set_account".format(url_api)
+#         print(session['user'])
+#         json = {
+#             "user":session['user'],
+#             "data":{
+#                 'banco':request.form['banco'],
+#                 'tipo':request.form['tipo'],
+#                 'data':request.form['data'],
+#                 'dinheiro':request.form['dinheiro']
+#             }
+#         }
+#         response = requests.post(url=url, json=json)
+#         return redirect(url_for('contas'))
 
-    return render_template("criarContas.html")
+#     return render_template("criarContas.html")
 
-@app.route("/contas/deleta<int:conta_id>", methods=['POST'])
-def deletaConta(conta_id):
-    if 'user' not in session:
-        return redirect(url_for('login'))
+# @app.route("/contas/deleta<int:conta_id>", methods=['POST'])
+# def deletaConta(conta_id):
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
 
-    url = "{0}/delete_account".format(url_api)
-    json = {
-        "user":session['user'],
-        "data":{
-            "id":conta_id
-        }
-    }
-    response = requests.delete(url=url, json=json)
-    print(response.json())
-    return redirect(url_for('contas'))
+#     url = "{0}/delete_account".format(url_api)
+#     json = {
+#         "user":session['user'],
+#         "data":{
+#             "id":conta_id
+#         }
+#     }
+#     response = requests.delete(url=url, json=json)
+#     print(response.json())
+#     return redirect(url_for('contas'))
 
     
 if __name__ == "__main__":

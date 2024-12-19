@@ -12,13 +12,11 @@ class UserController(BaseController):
         model.close() 
         return response
 
-    def login(self, name, password, hashCode):
+    def login(self, name, password):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
-        response = model.login(name, password, hashCode)
-        model.close() 
-        if response == 0 or response == '0':
-            return False
-        return True
+        response = model.login(name, password)
+        model.close()
+        return response
 
     def user(self, name, password, hashCode):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)

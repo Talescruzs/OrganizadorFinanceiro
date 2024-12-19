@@ -29,18 +29,18 @@ class UserModel(BaseModel):
             cursor.close()
             return '0'
 
-    def login(self, name, password, hashCode):
+    def login(self, name, password):
         cursor = self.connection.cursor()
         try:
             # Conectar ao banco de dados MySQL
             if self.connection.is_connected():
                 # Inserir um novo usuário
-                query = f"SELECT * FROM usuarios WHERE nome = '{name}' and senha = '{password}' and autenticador = '{hashCode}'"
+                query = f"SELECT * FROM usuarios WHERE nome = '{name}' and senha = '{password}'"
                 cursor.execute(query)
                 results = cursor.fetchall()
                 cursor.close()
                 if len(results) == 1:
-                    return True
+                    return results[0][2]
             return False
         except Error as e:
             print(f"Erro no select: {e}")

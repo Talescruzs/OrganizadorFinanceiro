@@ -16,7 +16,6 @@ def register():
         if(response != '0'):
             data = {
                 'nome':user["nome"],
-                'senha':'{0}'.format(user["senha"]),
                 'email':'{0}'.format(user["email"]),
                 'hash':'{0}'.format(response)
             }
@@ -34,10 +33,10 @@ def login():
     try:
         user = request.json
         controller = UserController()
-        response = controller.login(name=user["nome"], password=user["senha"], hashCode=user["hash"])
+        response = controller.login(name=user["nome"], password=user["senha"])
         return make_response(
             jsonify(
-                login=response
+                hash=response
             )
         ) 
     except:
