@@ -32,6 +32,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route("/", methods=['GET'])
 def home():
     if 'user' in session:
+        print(session['user'])
         return render_template("home.html", nome=session["user"]["nome"])
     return redirect(url_for('login'))
 
@@ -65,53 +66,49 @@ def login():
         return render_template("login.html", alerta="Errado, tente novamente")
     return render_template("login.html")
 
-@app.post("/cadastrar")
-def cadastrar():
-    return redirect(url_for('home'))
-
-
 @app.route('/logout', methods=['GET'])
 def logout():
     # remove the username from the session if it's there
     session.pop('user', None)
     return redirect(url_for('home'))
 
-# @app.route("/contas")
-# def contas():
-#     if 'user' not in session:
-#         return redirect(url_for('login'))
+@app.route("/contas", methods=['GET'])
+def contas():
+    if 'user' not in session:
+        return redirect(url_for('login'))
 
-#     url = "{0}/get_account".format(url_api)
-#     json = {
-#         "user":session['user']
-#     }
-#     response = requests.post(url=url, json=json)
-#     print(response.json())
+    url = "{0}/get_accounts".format(url_api)
+    json = {
+        "user":session['user']
+    }
+    response = requests.post(url=url, json=json)
+    print(response.json())
 
 
-#     return render_template("contas.html", contas=response.json())
+    return render_template("contas.html", contas=response.json())
 
-# @app.route("/contas/criar", methods=['GET', 'POST'])
-# def criarConta():
-#     if 'user' not in session:
-#         return redirect(url_for('login'))
+@app.route("/contas/criar", methods=['GET', 'POST'])
+def criarConta():
+    if 'user' not in session:
+        return redirect(url_for('login'))
 
-#     if request.method == 'POST':
-#         url = "{0}/set_account".format(url_api)
-#         print(session['user'])
-#         json = {
-#             "user":session['user'],
-#             "data":{
-#                 'banco':request.form['banco'],
-#                 'tipo':request.form['tipo'],
-#                 'data':request.form['data'],
-#                 'dinheiro':request.form['dinheiro']
-#             }
-#         }
-#         response = requests.post(url=url, json=json)
-#         return redirect(url_for('contas'))
+    if request.method == 'POST':
+        url = "{0}/set_account".format(url_api)
+        json = {
+            "user":session['user'],
+            "data":{
+                "nomeBanco":request.form['banco'],
+                "tipoConta":request.form['tipo'],
+                "data":request.form['data'],
+                "valor":int(request.form['dinheiro'])
+            }
+        }
+        print(json)
+        response = requests.post(url=url, json=json)
+        print(json)
+        return redirect(url_for('contas'))
 
-#     return render_template("criarContas.html")
+    return render_template("criarContas.html")
 
 # @app.route("/contas/deleta<int:conta_id>", methods=['POST'])
 # def deletaConta(conta_id):

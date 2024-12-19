@@ -32,7 +32,7 @@ class UserController(BaseController):
 
     def selectUserAccounts(self, user):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
-        userAccounts = model.selectUserAccounts(user['nome'], user['senha'], user['hash'])
+        userAccounts = model.selectUserAccounts(user['nome'], user['hash'])
         
         model.close() 
         return userAccounts

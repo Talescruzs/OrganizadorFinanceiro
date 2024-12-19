@@ -97,7 +97,7 @@ def get_accounts():
             response
         )
     except:
-        return [None]
+        return []
 
 @app.route('/delete_account', methods=['DELETE'])
 def delete_account():
@@ -113,7 +113,11 @@ def delete_account():
             )
         ) 
     except:
-        return [None]
+        return make_response(
+            jsonify(
+                status=False
+            )
+        )  
 
 @app.route('/set_movement', methods=['POST'])
 def set_movement():

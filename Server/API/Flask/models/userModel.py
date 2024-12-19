@@ -78,7 +78,7 @@ class UserModel(BaseModel):
         try:
             if self.connection.is_connected():
                 # Inserir um novo usuário
-                query = f"SELECT * FROM usuarios WHERE nome = '{name}' and senha = '{password}' and autenticador = '{hashCode}'"
+                query = f"SELECT * FROM usuarios WHERE nome = '{name}' and autenticador = '{hashCode}'"
                 cursor.execute(query)
                 results = cursor.fetchall()
                 cursor.close()
@@ -90,8 +90,8 @@ class UserModel(BaseModel):
             cursor.close()
             return response
 
-    def selectUserAccounts(self, name, password, hashCode):
-        userId = self.userId(name, password, hashCode)
+    def selectUserAccounts(self, name, hashCode):
+        userId = self.userId(name, hashCode)
         if(userId == 0):
             return 0
 
