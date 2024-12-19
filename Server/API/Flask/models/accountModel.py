@@ -84,3 +84,22 @@ class AccountModel(BaseModel):
         finally:
             cursor.close()
             return response
+
+    def updateAccountValue(self, idAccount, value):
+        cursor = self.connection.cursor()
+        # try:
+        if self.connection.is_connected():
+            update_query = '''
+            UPDATE contas
+            SET valor = %s
+            WHERE id = %s;
+            '''
+            values = (value, idAccount)
+            cursor.execute(update_query, values)
+            self.connection.commit()
+            cursor.close()
+            return True
+        # except Error as e:
+        #     print(f"Erro ao atualizar conta: {e}")
+        #     cursor.close()
+        #     return False

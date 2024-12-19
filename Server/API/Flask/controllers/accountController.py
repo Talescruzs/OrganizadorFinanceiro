@@ -47,7 +47,7 @@ class AccountController(BaseController):
             'id':accountById[0],
             'nomeBanco':accountById[1],
             'tipo':accountById[2],
-            'valor':accountById[3],
+            'valor':accountById[3]
         }
         return response
     
@@ -59,4 +59,31 @@ class AccountController(BaseController):
         model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
         response = model.deleteAccountById(accountId)
         model.close()
+        return response
+
+    def __changeAccountValue(self, idAccount, value):
+        atualValue = int(self.selectAccountById(idAccount)['valor'])
+        atualValue += value
+        model = AccountModel(self.host_name, self.user_name, self.user_password, self.db_name)
+        response = model.updateAccountValue(idAccount, atualValue)
+        model.close()
+        return response
+
+
+
+
+    def updateAccountById(self, user, data):
+        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        if userId == 0:
+            return False
+
+        response = False
+
+        if 'conta_ini' in data:
+            response = self.__changeAccountValue(data['conta_ini'], data['valor']*(-1)) # debita
+            if not response:
+                return False
+        if 'conta_fim' in data:
+            response = self.__changeAccountValue(data['conta_fim'], data['valor']) # credita
+
         return response

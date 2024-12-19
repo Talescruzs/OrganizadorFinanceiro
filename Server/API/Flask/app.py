@@ -119,10 +119,16 @@ def delete_account():
 @app.route('/set_movement', methods=['POST'])
 def set_movement():
     # try:
-    controller = MovementController()
+    movController = MovementController()
+    accountController = AccountController()
+
     user = request.json["user"]
     data = request.json["data"]
-    response = controller.createMovement(user, data)
+    response1 = movController.createMovement(user, data)
+    response2 = accountController.updateAccountById(user, data)
+    response = False
+    if(response1 and response2):
+        response = True
 
     return make_response(
         jsonify(
@@ -135,10 +141,11 @@ def set_movement():
 @app.route('/get_movements', methods=['POST'])
 def get_movements():
     # try:
-    controller = MovementController()
+    movController = MovementController()
+
     user = request.json["user"]
     accountId = request.json["data"]["idConta"]
-    response = controller.selectMovementsByAccount(accountId)
+    response = movController.selectMovementsByAccount(accountId)
 
     return make_response(
         jsonify(
