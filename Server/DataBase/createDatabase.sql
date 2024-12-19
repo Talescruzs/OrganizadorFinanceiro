@@ -26,8 +26,9 @@ CREATE TABLE `usuario_conta` (
 CREATE TABLE `movimentacoes` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `desc` VARCHAR(255),
-  `conta_fim` INT,
   `conta_ini` INT,
+  `conta_fim` INT,
+  `fk_usuario` INT,
   `valor` INT,
   `data` DATETIME
 );
@@ -60,6 +61,8 @@ ALTER TABLE `movimentacoes`
 ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
 ALTER TABLE `movimentacoes` 
 ADD FOREIGN KEY (`conta_ini`) REFERENCES `contas` (`id`) ON DELETE CASCADE;
+ALTER TABLE `movimentacoes` 
+ADD FOREIGN KEY (`fk_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `rotina` 
 ADD FOREIGN KEY (`conta_fim`) REFERENCES `contas` (`id`) ON DELETE CASCADE;

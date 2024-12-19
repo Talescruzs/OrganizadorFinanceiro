@@ -2,6 +2,7 @@ from flask import Flask, make_response, request, jsonify
 # from dataBase import Connection
 from controllers.userController import UserController
 from controllers.accountController import AccountController
+from controllers.movementController import MovementController
 # from controle import verificaUser, verificaAccount
 
 app = Flask(__name__)
@@ -114,6 +115,38 @@ def delete_account():
         ) 
     except:
         return [None]
+
+@app.route('/set_movement', methods=['POST'])
+def set_movement():
+    # try:
+    controller = MovementController()
+    user = request.json["user"]
+    data = request.json["data"]
+    response = controller.createMovement(user, data)
+
+    return make_response(
+        jsonify(
+            status=response
+        )
+    ) 
+    # except:
+    #     return [None]
+
+@app.route('/get_movements', methods=['POST'])
+def get_movements():
+    # try:
+    controller = MovementController()
+    user = request.json["user"]
+    accountId = request.json["data"]["idConta"]
+    response = controller.selectMovementsByAccount(accountId)
+
+    return make_response(
+        jsonify(
+            status=response
+        )
+    ) 
+    # except:
+    #     return [None]
 
 # @app.route('/set_routines', methods=['POST'])
 # def set_routines():
