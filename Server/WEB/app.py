@@ -95,25 +95,13 @@ def criarConta():
     if request.method == 'POST':
         url = f"{url_api}/set_account"
         payload = {
-            "user": {
-                "email": session['user']['email'],
-                "hash": session['user']['hash'],
-                "nome": session['user']['nome']
-            },
+            "user":session['user'],
             "data": {
                 "nomeBanco": request.form['banco'].strip(),
                 "tipoConta": request.form['tipo'].strip().upper(),
                 "valor": int(request.form['dinheiro'])
             }
         }
-
-        # Validar JSON antes de enviar
-        try:
-            json_payload = json.dumps(payload)  # Validação de formato JSON
-            print("Payload JSON válido:", json_payload)
-        except Exception as e:
-            print("Erro ao validar JSON:", e)
-            return "Erro na estrutura do payload"
 
         # Enviar a requisição
         response = requests.post(url=url, json=payload)
@@ -132,20 +120,20 @@ def criarConta():
 
 @app.route("/contas/deleta<int:conta_id>", methods=['POST'])
 def deletaConta(conta_id):
-    return redirect(url_for('contas'))
-    # if 'user' not in session:
-    #     return redirect(url_for('login'))
-
-    # url = "{0}/delete_account".format(url_api)
-    # json = {
-    #     "user":session['user'],
-    #     "data":{
-    #         "id":conta_id
-    #     }
-    # }
-    # response = requests.delete(url=url, json=json)
-    # print(response.json())
     # return redirect(url_for('contas'))
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    url = "{0}/delete_account".format(url_api)
+    json = {
+        "user":session['user'],
+        "data":{
+            "idConta":conta_id
+        }
+    }
+    response = requests.delete(url=url, json=json)
+    print(response.json())
+    return redirect(url_for('contas'))
 
     
 if __name__ == "__main__":
