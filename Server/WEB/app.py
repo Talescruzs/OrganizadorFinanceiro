@@ -95,7 +95,11 @@ def criarConta():
     if request.method == 'POST':
         url = f"{url_api}/set_account"
         payload = {
-            "user":session['user'],
+            "user": {
+                "email": session['user']['email'],
+                "hash": session['user']['hash'],
+                "nome": session['user']['nome']
+            },
             "data": {
                 "nomeBanco": request.form['banco'].strip(),
                 "tipoConta": request.form['tipo'].strip().upper(),
@@ -120,7 +124,6 @@ def criarConta():
 
 @app.route("/contas/deleta<int:conta_id>", methods=['POST'])
 def deletaConta(conta_id):
-    # return redirect(url_for('contas'))
     if 'user' not in session:
         return redirect(url_for('login'))
 
@@ -134,6 +137,22 @@ def deletaConta(conta_id):
     response = requests.delete(url=url, json=json)
     print(response.json())
     return redirect(url_for('contas'))
+
+@app.route("/contas/detalhes<int:conta_id>", methods=['POST'])
+def detalhes(conta_id):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    url = "{0}/get_movements".format(url_api)
+    json = {
+        "user":session['user'],
+        "data":{
+            "idConta":conta_id
+        }
+    }
+    response = requests.post(url=url, json=json)
+    print(response.json())
+    return render_template("movimentos.html", contas=response.json())
 
     
 if __name__ == "__main__":

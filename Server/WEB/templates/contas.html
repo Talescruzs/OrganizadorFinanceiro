@@ -39,6 +39,10 @@
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit" class="btn bg-warning btn-sm">Rotinas</button>
                             </form>
+                            <form action="{{ url_for('detalhes', conta_id=conta['id']) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_method" value="POST">
+                                <button type="submit" class="btn bg-green btn-sm">Extrato</button>
+                            </form>
                         </td>
                     </tr>
             {% endfor %}

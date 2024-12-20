@@ -150,11 +150,7 @@ def get_movements():
     accountId = request.json["data"]["idConta"]
     response = movController.selectMovementsByAccount(accountId)
 
-    return make_response(
-        jsonify(
-            status=response
-        )
-    ) 
+    return response
     # except:
     #     return [None]
 
