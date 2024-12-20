@@ -10,7 +10,7 @@ class MovementController(BaseController):
         super().__init__()
     
     def createMovement(self, user, data):
-        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        userId = UserController().userId(user['nome'], user['hash'])
         if userId == 0:
             return False
 
@@ -50,7 +50,7 @@ class MovementController(BaseController):
         return response
     
     # def deleteAccountById(self, user, accountId):
-    #     userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+    #     userId = UserController().userId(user['nome'], user['hash'])
     #     if userId == 0:
     #         return False
 

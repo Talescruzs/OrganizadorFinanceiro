@@ -63,19 +63,19 @@ def user():
 
 @app.route('/set_account', methods=['POST'])
 def set_account():
-    try:
-        controller = AccountController()
-        user = request.json["user"]
-        data = request.json["data"]
-        response = controller.createAccount(user, data)
+    # try:
+    controller = AccountController()
+    user = request.json["user"]
+    data = request.json["data"]
+    response = controller.createAccount(user, data)
 
-        return make_response(
-            jsonify(
-                status=response
-            )
-        ) 
-    except:
-        return ["error"]
+    return make_response(
+        jsonify(
+            status=response
+        )
+    ) 
+    # except:
+    #     return ["error"]
 
 @app.route('/get_accounts', methods=['GET', 'POST'])
 def get_accounts():

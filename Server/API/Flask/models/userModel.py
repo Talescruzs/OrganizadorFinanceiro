@@ -72,7 +72,7 @@ class UserModel(BaseModel):
             cursor.close()
             return response
 
-    def userId(self, name, password, hashCode):
+    def userId(self, name, hashCode):
         cursor = self.connection.cursor()
         response = 0
         try:

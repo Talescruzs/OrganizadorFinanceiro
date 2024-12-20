@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, session, request
-# from dataBase import Connection
+import json  # Import para validar e depurar JSON
 import requests
 from dotenv import load_dotenv
 from pathlib import Path
@@ -93,20 +93,40 @@ def criarConta():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        url = "{0}/set_account".format(url_api)
-        json = {
-            "user":session['user'],
-            "data":{
-                "nomeBanco":request.form['banco'],
-                "tipoConta":request.form['tipo'],
-                "data":request.form['data'],
-                "valor":int(request.form['dinheiro'])
+        url = f"{url_api}/set_account"
+        payload = {
+            "user": {
+                "email": session['user']['email'],
+                "hash": session['user']['hash'],
+                "nome": session['user']['nome']
+            },
+            "data": {
+                "nomeBanco": request.form['banco'].strip(),
+                "tipoConta": request.form['tipo'].strip().upper(),
+                "valor": int(request.form['dinheiro'])
             }
         }
-        print(json)
-        response = requests.post(url=url, json=json)
-        print(json)
+
+        # Validar JSON antes de enviar
+        try:
+            json_payload = json.dumps(payload)  # Validação de formato JSON
+            print("Payload JSON válido:", json_payload)
+        except Exception as e:
+            print("Erro ao validar JSON:", e)
+            return "Erro na estrutura do payload"
+
+        # Enviar a requisição
+        response = requests.post(url=url, json=payload)
+
+        # Logar a resposta para depuração
+        try:
+            print("Resposta da API:", response.status_code, response.json())
+        except Exception as e:
+            print("Erro ao processar a resposta da API:", e)
+            print("Texto bruto da resposta:", response.text)
+
         return redirect(url_for('contas'))
+
 
     return render_template("criarContas.html")
 

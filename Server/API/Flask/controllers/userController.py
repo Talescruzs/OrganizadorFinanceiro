@@ -24,9 +24,9 @@ class UserController(BaseController):
         model.close() 
         return response
     
-    def userId(self, name, password, hashCode):
+    def userId(self, name, hashCode):
         model = UserModel(self.host_name, self.user_name, self.user_password, self.db_name)
-        response = model.userId(name, password, hashCode)
+        response = model.userId(name, hashCode)
         model.close() 
         return response
 

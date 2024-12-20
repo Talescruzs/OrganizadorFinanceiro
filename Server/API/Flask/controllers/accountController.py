@@ -10,7 +10,7 @@ class AccountController(BaseController):
         super().__init__()
     
     def createAccount(self, user, data):
-        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        userId = UserController().userId(user['nome'], user['hash'])
         if userId == 0:
             return False
 
@@ -52,7 +52,7 @@ class AccountController(BaseController):
         return response
     
     def deleteAccountById(self, user, accountId):
-        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        userId = UserController().userId(user['nome'], user['hash'])
         if userId == 0:
             return False
 
@@ -73,7 +73,7 @@ class AccountController(BaseController):
 
 
     def updateAccountById(self, user, data):
-        userId = UserController().userId(user['nome'], user['senha'], user['hash'])
+        userId = UserController().userId(user['nome'], user['hash'])
         if userId == 0:
             return False
 
