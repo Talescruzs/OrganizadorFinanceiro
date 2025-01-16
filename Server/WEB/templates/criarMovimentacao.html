@@ -1,0 +1,29 @@
+{% extends "contents/headComplete.html" %}
+{% block title %}Criar Movimentação{% endblock %}
+{% block h1 %}Criar Movimentação{% endblock %}
+
+{% block content %}
+<div class="container">
+  <strong><nav>
+    <h2>{{ alerta }}</h2>
+    <form method="post">
+      <label for="desc">Descrição:</label><br>
+      <input type="text" id="desc" name="desc" required><br><br>
+
+      <label for="conta_ini">Conta_ini:</label><br>
+      <input type="text" id="conta_ini" name="conta_ini"><br><br>
+
+      <label for="conta_fim">Conta_fim:</label><br>
+      <input type="text" id="conta_fim" name="conta_fim"><br><br>
+
+      <label for="valor">Valor:</label><br>
+      <input type="number" id="valor" name="valor" required><br><br>
+
+      <button type="submit" class="btn btn-primary">Criar</button>
+    </form>
+  <!-- <ul class="menu">
+  <li><a href="{{ url_for('criarConta') }}">Cadastrar</a></li>
+  </ul> -->
+  </nav></strong>
+</div>
+{% endblock %}

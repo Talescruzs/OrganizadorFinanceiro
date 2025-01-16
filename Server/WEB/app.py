@@ -61,7 +61,11 @@ def login():
         }
         response = requests.post(url=url, json=json)
         if(response.json() != [None]):
-            session['user'] = response.json()["user"]
+            session['user'] = {
+                "nome": request.form['nome'],
+                "senha": request.form['senha'],
+                "hash": response.json()["hash"]
+            }
             return redirect(url_for('home'))
         return render_template("login.html", alerta="Errado, tente novamente")
     return render_template("login.html")
@@ -152,7 +156,43 @@ def detalhes(conta_id):
     }
     response = requests.post(url=url, json=json)
     print(response.json())
-    return render_template("movimentos.html", contas=response.json())
+    return render_template("movimentos.html", contas=response.json(), conta_id=conta_id)
+
+@app.route("/contas/detalhes<int:conta_id>/movimentacao", methods=['GET', 'POST'])
+def movimentacao(conta_id):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        url = f"{url_api}/set_movement"
+        payload = {
+            "user": {
+                "email": session['user']['email'],
+                "hash": session['user']['hash'],
+                "nome": session['user']['nome']
+            },
+            "data": {
+                "desc": request.form['desc'].strip(),
+                "conta_ini": request.form['conta_ini'],
+                "conta_fim": request.form['conta_fim'],
+                "valor": int(request.form['valor'])
+            }
+        }
+
+        # Enviar a requisição
+        response = requests.post(url=url, json=payload)
+
+        # Logar a resposta para depuração
+        try:
+            print("Resposta da API:", response.status_code, response.json())
+        except Exception as e:
+            print("Erro ao processar a resposta da API:", e)
+            print("Texto bruto da resposta:", response.text)
+
+        return redirect(url_for('detalhes', conta_id=conta_id))
+
+
+    return render_template("criarMovimentacao.html")
 
     
 if __name__ == "__main__":
